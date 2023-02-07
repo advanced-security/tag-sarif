@@ -56,7 +56,7 @@ def add_args(parser: argparse.ArgumentParser) -> None:
         type=lambda arg: arg.split(",", maxsplit=2), nargs='+',
         help='List of Rule IDs to edit, with sub-severity, comma-separated, e.g. py/code-injection,low'
     )
-    parser.add_argument('--custom-tags', '-t', nargs='+', help='List of custom tags to add to each rule')
+    parser.add_argument('--custom-tags', '-t', type=lambda arg: arg.split(",", maxsplit=2), nargs='+', help='List of custom tags to add to each rule')
     parser.add_argument('sarif', help='SARIF file to edit')
     parser.add_argument('--debug', '-d', action='store_true', help='Enable debug logging')
 

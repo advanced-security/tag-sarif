@@ -1,0 +1,24 @@
+name: 'Edit SARIF'
+description: 'Edit SARIF results'
+branding:
+  icon: 'edit'
+  color: 'blue'
+inputs:
+  tags:
+    description: 'Tags to add to every rule in the SARIF file, comma separated'
+    required: true
+  input:
+    description: 'Path to the input SARIF file'
+    required: true
+  output:
+    description: 'Path to the output SARIF file'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: edit
+      run: |
+        unset LD_PRELOAD
+        unset PYTHONSTARTUP
+        python3 "${{ github.action_path }}/edit_sarif.py" "${{ inputs.input }}" --custom-tags "${{ inputs.tags }}" > "${{ inputs.output }}"
+      shell: bash
