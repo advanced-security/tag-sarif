@@ -20,5 +20,5 @@ runs:
       run: |
         unset LD_PRELOAD
         unset PYTHONSTARTUP
-        python3 "${{ github.action_path }}/edit_sarif.py" "${{ inputs.input }}" --custom-tags "${{ inputs.tags }}" > "${{ inputs.output }}"
+        python3 "${{ github.action_path }}/edit_sarif.py" "${{ inputs.input }}" --custom-tags "${{ inputs.tags }}" --output-sarif "${{ inputs.output }}"
       shell: bash
