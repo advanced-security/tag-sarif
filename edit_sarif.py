@@ -73,7 +73,11 @@ def main() -> None:
         LOG.setLevel(logging.DEBUG)
 
     with open(args.sarif, 'r') as f:
-        sarif = json.load(f)
+        try:
+            sarif = json.load(f)
+        except json.JSONDecodeError as err:
+            LOG.error("Error parsing SARIF file as JSON (%s): %s", args.sarif, err)
+            return
         print(json.dumps(
             edit_sarif(
                 sarif,
