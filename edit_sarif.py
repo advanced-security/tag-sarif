@@ -74,9 +74,11 @@ def main() -> None:
 
     with open(args.sarif, 'r') as f:
         try:
-            sarif = json.load(f)
+            data = f.read()
+            sarif = json.loads(data)
         except json.JSONDecodeError as err:
             LOG.error("Error parsing SARIF file as JSON (%s): %s", args.sarif, err)
+            LOG.error("Could not parse as JSON: %s", data)
             return
         print(json.dumps(
             edit_sarif(
