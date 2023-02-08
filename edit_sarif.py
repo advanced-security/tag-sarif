@@ -22,29 +22,33 @@ class SeverityLevel(str, Enum):
     LOW = "low"
 
 
-def edit_sarif(sarif: dict[str, Any], severity_list: list[tuple[str, str]], custom_tags: list[str]) -> dict[str, Any]:
+def add_tags(object, tags: list[str]) -> None:
+    """Add tags to a SARIF object."""
+    if "properties" not in object:
+        object["properties"] = {}
+
+    if "tags" not in object["properties"]:
+        object["properties"]["tags"] = []
+
+    object["properties"]["tags"].extend(tags)
+
+
+def edit_sarif(sarif: dict[str, Any], custom_tags: list[str]) -> dict[str, Any]:
     """Edit SARIF file.
 
-    - Replace sub-severity with passed in level for matching rule ID.
     - Add custom tag(s) to each rule ID, to help with filtering in Code Scanning in GitHub Advanced Security 
     """
     try:
         for run in sarif["runs"]:
-            for rule in run["tool"]["driver"]["rules"]:
-                for rule_id, severity in severity_list:
-                    # TODO: glob match on the rule ID
-                    if rule["id"] == rule_id.strip():
-                        rule["properties"]["sub-severity"] = SeverityLevel(severity.strip())
-                        LOG.debug("Rule %s sub-severity set to %s", rule_id, severity)
-
-                # add custom tags to each rule
-                if "properties" not in rule:
-                    rule["properties"] = {}
-
-                if "tags" not in rule["properties"]:
-                    rule["properties"]["tags"] = []
-
-                rule["properties"]["tags"].extend(custom_tags)
+            if "tool" in run and "driver" in run["tool"]:
+                if "rules" in run["tool"]["driver"]:
+                    for rule in run["tool"]["driver"]["rules"]:
+                        add_tags(rule, custom_tags)
+                if "extensions" in run["tool"]["driver"]:
+                    for extension in run["tool"]["driver"]["extensions"]:
+                        if "notfications" in extension:
+                            for notification in extension["notifications"]:
+                                add_tags(notification, custom_tags)
     except KeyError as err:
         LOG.error("SARIF structure error: %s", err)
     return sarif
@@ -52,11 +56,6 @@ def edit_sarif(sarif: dict[str, Any], severity_list: list[tuple[str, str]], cust
 
 def add_args(parser: argparse.ArgumentParser) -> None:
     """Add arguments to the parser."""
-    parser.add_argument(
-        '--rule_id_severity', '-r',
-        type=lambda arg: arg.split(",", maxsplit=2), nargs='+',
-        help='List of Rule IDs to edit, with sub-severity, comma-separated, e.g. py/code-injection,low'
-    )
     parser.add_argument('--custom-tags', '-t', type=lambda arg: arg.split(","), help='List of custom tags to add to each rule')
     parser.add_argument('input_sarif', help='SARIF file to edit')
     parser.add_argument('--output-sarif', '-o', help='SARIF file to write')
@@ -65,7 +64,7 @@ def add_args(parser: argparse.ArgumentParser) -> None:
 
 def main() -> None:
     """Main entry point for the script."""
-    parser = argparse.ArgumentParser(description="Edit SARIF file sub-severity level for named rules.")
+    parser = argparse.ArgumentParser(description="Edit SARIF file tags.")
     add_args(parser)
     args = parser.parse_args()
 
@@ -87,7 +86,6 @@ def main() -> None:
             print(json.dumps(
                 edit_sarif(
                     sarif,
-                    args.rule_id_severity if args.rule_id_severity else [],
                     args.custom_tags if args.custom_tags else []
                 ), indent=2)
                 , file=out_f)

@@ -4,12 +4,17 @@ Edits a SARIF file.
 
 Currently:
 
-* adding tags to each rule
-* editing the severity of a rule
+* adds tags to each rule
 
-When used as an Action, it is currently limited to adding tags to each rule.
+It can run at the command-line, using Python, or as a GitHub Action.
 
-## Example
+## Example at the command-line
+
+```python
+python3 edit_sarif.py test.sarif --custom-tags example-tag --output-sarif test.sarif
+```
+
+## Example as an Action
 
 The following example adds the tag "custom-tag" to each rule in the SARIF file:
 
@@ -67,4 +72,4 @@ jobs:
         retention-days: 1
 ```
 
-Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can filter the SARIF with the `edit-sarif` action before uploading it via `upload-sarif`. Finally, we also attach the resulting SARIF file to the build, which is convenient for later inspection.
+Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `edit-sarif` action before uploading it via `upload-sarif`. Finally, we also attach the resulting SARIF file to the build, which is convenient for later inspection.
