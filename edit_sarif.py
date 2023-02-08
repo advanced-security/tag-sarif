@@ -40,15 +40,16 @@ def edit_sarif(sarif: dict[str, Any], custom_tags: list[str]) -> dict[str, Any]:
     """
     try:
         for run in sarif["runs"]:
-            if "tool" in run and "driver" in run["tool"]:
-                if "rules" in run["tool"]["driver"]:
-                    for rule in run["tool"]["driver"]["rules"]:
-                        add_tags(rule, custom_tags)
-                if "extensions" in run["tool"]["driver"]:
-                    for extension in run["tool"]["driver"]["extensions"]:
-                        if "notfications" in extension:
-                            for notification in extension["notifications"]:
-                                add_tags(notification, custom_tags)
+            if "tool" in run:
+                if "driver" in run["tool"]:
+                    if "rules" in run["tool"]["driver"]:
+                        for rule in run["tool"]["driver"]["rules"]:
+                            add_tags(rule, custom_tags)
+                if "extensions" in run["tool"]:
+                    for extension in run["tool"]["extensions"]:
+                        if "rules" in extension:
+                            for rule in extension["rules"]:
+                                add_tags(rule, custom_tags)
     except KeyError as err:
         LOG.error("SARIF structure error: %s", err)
     return sarif
