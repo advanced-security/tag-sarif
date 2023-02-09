@@ -65,7 +65,7 @@ jobs:
         sarif_file: sarif-results/${{ matrix.language }}.sarif
 
     - name: Upload SARIF results as a Build Artifact
-      uses: actions/upload-artifact@v2.2.0
+      uses: actions/upload-artifact@v3
       with:
         name: sarif-results
         path: sarif-results
