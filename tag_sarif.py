@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-"""Edit SARIF files.
+"""
+Tag rules in SARIF files, to help with filtering in GitHub Code Scanning.
 
 Copyright (C) GitHub 2022
 """
@@ -15,13 +16,6 @@ from typing import Any
 LOG = logging.getLogger(__name__)
 
 
-class SeverityLevel(str, Enum):
-    """Sub-severity level for a SARIF result."""
-    CRITICAL = "critical"
-    HIGH = "high"
-    LOW = "low"
-
-
 def add_tags(object, tags: list[str]) -> None:
     """Add tags to a SARIF object."""
     if "properties" not in object:
@@ -33,8 +27,9 @@ def add_tags(object, tags: list[str]) -> None:
     object["properties"]["tags"].extend(tags)
 
 
-def edit_sarif(sarif: dict[str, Any], custom_tags: list[str]) -> dict[str, Any]:
-    """Edit SARIF file.
+def tag_sarif(sarif: dict[str, Any], custom_tags: list[str]) -> dict[str, Any]:
+    """
+    Tag SARIF file.
 
     - Add custom tag(s) to each rule ID, to help with filtering in Code Scanning in GitHub Advanced Security 
     """
@@ -85,7 +80,7 @@ def main() -> None:
         # NOTE: closes STDOUT after the context manager if no output file is specified
         with open(args.output_sarif, 'w') if args.output_sarif else sys.stdout as out_f:
             print(json.dumps(
-                edit_sarif(
+                tag_sarif(
                     sarif,
                     args.custom_tags if args.custom_tags else []
                 ), indent=2)
