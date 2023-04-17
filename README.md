@@ -2,15 +2,19 @@
 
 > ℹ️ This is an _unofficial_ tool created by Field Security Services, and is not officially supported by GitHub.
 
-This script lets you filter results from different Code Scanning workflows in the GitHub Security tab using a custom tag.
+This script lets you filter results from different Code Scanning runs in the GitHub Security tab using a custom tag.
 
-The SARIF is edited before upload to Code Scanning, applying one or more tags to each query/rule. The tags are attached to each Code Scanning result in the GitHub Security tab, and can be used to filter results in the web user interface.
+This is useful when dealing with monorepos that have code for several different projects in the same repository. You can use this tool to mark each project with a unique tag, and then filter the results in the GitHub Security tab to only show results for a specific project.
+
+The SARIF is edited before upload to Code Scanning, applying one or more tags to each query/rule. The tags are attached to each Code Scanning result in the GitHub Security tab, and can be used to filter results in the web user interface:
+
+![Filtering results by tag](code-scanning-filter-tag.png)
 
 It can run as a GitHub Action, or at the command-line.
 
 ## Example as an Action
 
-We must modify an existing Code Scanning Actions workflow file to add the `tag-sarif` action.
+We must modify an existing Code Scanning Actions workflow file to add the `tag-sarif` action, and add the literal tag `custom-tag` to each rule (and so to each result). You need to change that tag to something suitable for your use, such as a team name or a project name.
 
 For example, if we are using the CodeQL action, we change the single `analyze` step from this:
 
