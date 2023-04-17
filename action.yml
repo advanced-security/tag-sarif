@@ -1,5 +1,5 @@
-name: 'Edit SARIF'
-description: 'Edit SARIF results'
+name: 'Tag SARIF'
+description: 'Tag SARIF results'
 branding:
   icon: 'edit'
   color: 'blue'
