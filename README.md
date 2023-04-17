@@ -1,17 +1,13 @@
 # edit-sarif
 
-Edits a SARIF file.
-
-Currently:
-
-* adds tags to each rule
+Tags rules in a SARIF file.
 
 It can run at the command-line, using Python, or as a GitHub Action.
 
 ## Example at the command-line
 
 ```python
-python3 edit_sarif.py test.sarif --custom-tags example-tag --output-sarif test.sarif
+python3 tag_sarif.py test.sarif --custom-tags example-tag --output-sarif test.sarif
 ```
 
 ## Example as an Action
@@ -19,7 +15,7 @@ python3 edit_sarif.py test.sarif --custom-tags example-tag --output-sarif test.s
 The following example adds the tag "custom-tag" to each rule in the SARIF file:
 
 ```yaml
-name: "Edit SARIF"
+name: "Tag SARIF"
 on:
   push:
     branches: [main]
@@ -52,8 +48,8 @@ jobs:
         upload: False
         output: sarif-results
 
-    - name: Edit SARIF
-      uses: advanced-security/edit-sarif@main
+    - name: Tag SARIF
+      uses: advanced-security/tag-sarif@main
       with:
         tags: custom-tag
         input: sarif-results/${{ matrix.language }}.sarif
@@ -72,4 +68,4 @@ jobs:
         retention-days: 1
 ```
 
-Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `edit-sarif` action before uploading it via `upload-sarif`. Finally, we also attach the resulting SARIF file to the build, which is convenient for later inspection.
+Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `tag-sarif` action before uploading it via `upload-sarif`. Finally, we also attach the resulting SARIF file to the build, which is convenient for later inspection.
