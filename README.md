@@ -12,7 +12,38 @@ It can run as a GitHub Action, or at the command-line.
 
 We must modify an existing Code Scanning Actions workflow file to add the `tag-sarif` action.
 
-The following example adds the tag "custom-tag" to each rule in the SARIF file:
+For example, if we are using the CodeQL action, we change the single `analyze` step from this:
+
+```yaml
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+```
+
+To:
+
+```yaml
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        upload: False
+        output: sarif-results
+
+    - name: Tag SARIF
+      uses: advanced-security/tag-sarif@main
+      with:
+        tags: custom-tag
+        input: sarif-results/${{ matrix.language }}.sarif
+        output: sarif-results/${{ matrix.language }}.sarif
+      
+    - name: Upload SARIF
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: sarif-results/${{ matrix.language }}.sarif
+```
+
+Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `tag-sarif` action before uploading it with the `upload-sarif` action.
+
+A full example workflow is:
 
 ```yaml
 name: "Tag SARIF"
@@ -68,9 +99,7 @@ jobs:
         retention-days: 1
 ```
 
-Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `tag-sarif` action before uploading it via `upload-sarif`.
-
-Finally, we also attach the resulting SARIF file to the build as a Build Artifact, which is convenient for later inspection. You can remove this step if you don't need it.
+In this full example we also attach the resulting SARIF file to the build as a Build Artifact, which is convenient for later inspection. You can remove this step if you don't need it.
 
 ## Example at the command-line
 
