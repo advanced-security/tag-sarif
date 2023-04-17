@@ -1,16 +1,16 @@
-# edit-sarif
+# tag-sarif
 
-Tags rules in a SARIF file.
+> ℹ️ This is an _unofficial_ tool created by Field Security Services, and is not officially supported by GitHub.
 
-It can run at the command-line, using Python, or as a GitHub Action.
+This script lets you filter results from different Code Scanning workflows in the GitHub Security tab using a custom tag.
 
-## Example at the command-line
+The SARIF is edited before upload to Code Scanning, applying one or more tags to each query/rule. The tags are attached to each Code Scanning result in the GitHub Security tab, and can be used to filter results in the web user interface.
 
-```python
-python3 tag_sarif.py test.sarif --custom-tags example-tag --output-sarif test.sarif
-```
+It can run as a GitHub Action, or at the command-line.
 
 ## Example as an Action
+
+We must modify an existing Code Scanning Actions workflow file to add the `tag-sarif` action.
 
 The following example adds the tag "custom-tag" to each rule in the SARIF file:
 
@@ -68,4 +68,16 @@ jobs:
         retention-days: 1
 ```
 
-Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `tag-sarif` action before uploading it via `upload-sarif`. Finally, we also attach the resulting SARIF file to the build, which is convenient for later inspection.
+Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `tag-sarif` action before uploading it via `upload-sarif`.
+
+Finally, we also attach the resulting SARIF file to the build as a Build Artifact, which is convenient for later inspection. You can remove this step if you don't need it.
+
+## Example at the command-line
+
+```python
+python3 tag_sarif.py test.sarif --custom-tags example-tag --output-sarif test.sarif
+```
+
+## Notes
+
+See the [LICENSE](LICENSE), [CHANGELOG](CHANGELOG.md), [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md), [SUPPORT](SUPPORT.md), [CODE OF CONDUCT](CODE_OF_CONDUCT.md) and [PRIVACY](PRIVACY.md) files for more information.
