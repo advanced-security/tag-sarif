@@ -1,5 +1,7 @@
 # tag-sarif
 
+> ⛔️ This project is going to be withdrawn, since it does not function as intended
+
 > ℹ️ This is an _unofficial_ tool created by Field Security Services, and is not officially supported by GitHub.
 
 This script lets you filter results from different Code Scanning runs in the GitHub Security tab using a custom tag.
