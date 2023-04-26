@@ -1,6 +1,6 @@
 # tag-sarif
 
-> ⛔️ This project is going to be withdrawn, since it does not function as intended
+> ⛔️ This project has been withdrawn, since it does not function as intended
 
 > ℹ️ This is an _unofficial_ tool created by Field Security Services, and is not officially supported by GitHub.
 
@@ -15,6 +15,8 @@ The SARIF is edited before upload to Code Scanning, applying one or more tags to
 It can run as a GitHub Action, or at the command-line.
 
 ## Example as an Action
+
+> ⛔️ This project has been withdrawn, since it does not function as intended
 
 We must modify an existing Code Scanning Actions workflow file to add the `tag-sarif` action, and add the literal tag `custom-tag` to each rule (and so to each result). You need to change that tag to something suitable for your use, such as a team name or a project name.
 
@@ -48,6 +50,8 @@ To:
 ```
 
 Note how we provided `upload: False` and `output: sarif-results` to the `analyze` action. That way we can edit the SARIF with the `tag-sarif` action before uploading it with the `upload-sarif` action.
+
+> ⛔️ This project has been withdrawn, since it does not function as intended
 
 A full example workflow is:
 
@@ -109,6 +113,8 @@ In this full example we also attach the resulting SARIF file to the build as a B
 
 ## Example at the command-line
 
+> ⛔️ This project has been withdrawn, since it does not function as intended
+
 ```python
 python3 tag_sarif.py test.sarif --custom-tags example-tag --output-sarif test.sarif
 ```
@@ -132,5 +138,7 @@ See [CODEOWNERS](CODEOWNERS) for the list of maintainers.
 See the [SUPPORT](SUPPORT.md) file.
 
 ## Background
+
+> ⛔️ This project has been withdrawn, since it does not function as intended
 
 See the [CHANGELOG](CHANGELOG.md), [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md), [SUPPORT](SUPPORT.md), [CODE OF CONDUCT](CODE_OF_CONDUCT.md) and [PRIVACY](PRIVACY.md) files for more information.
