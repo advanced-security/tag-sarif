@@ -18,7 +18,8 @@ runs:
   steps:
     - name: edit
       run: |
-        unset LD_PRELOAD
-        unset PYTHONSTARTUP
-        python3 "${{ github.action_path }}/tag_sarif.py" "${{ inputs.input }}" --custom-tags "${{ inputs.tags }}" --output-sarif "${{ inputs.output }}"
+        exit 1
+        # unset LD_PRELOAD
+        # unset PYTHONSTARTUP
+        # python3 "${{ github.action_path }}/tag_sarif.py" "${{ inputs.input }}" --custom-tags "${{ inputs.tags }}" --output-sarif "${{ inputs.output }}"
       shell: bash
